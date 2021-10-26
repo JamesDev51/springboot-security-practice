@@ -4,6 +4,9 @@ import com.security.practice.model.User;
 import com.security.practice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -27,11 +30,11 @@ public class IndexController {
         return "user";
     }
     @GetMapping("/admin")
-    public   String admin(){
+    public  @ResponseBody String admin(){
         return "admin";
     }
     @GetMapping("/manager")
-    public   String manager(){
+    public  @ResponseBody String manager(){
         return "manager";
     }
     @GetMapping("/loginForm")
@@ -51,6 +54,18 @@ public class IndexController {
         user.setPassword(encPassword);
         userRepository.save(user); //회원가입이 잘됨 -> but 비밀번호가 암호화
         return "redirect:/loginForm";
-
     }
+
+    @Secured("ROLE_ADMIN")
+    @GetMapping("/info")
+    public @ResponseBody String info(){
+        return "개인정보 : ";
+    }
+    @PreAuthorize("hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')") //함수 실행전에 수행 -> 얘는 hasRole 문법을 사용할 수 있음
+    @GetMapping("/data")
+    public @ResponseBody String data(){
+        return "데이터 정보 : ";
+    }
+
+
 }
