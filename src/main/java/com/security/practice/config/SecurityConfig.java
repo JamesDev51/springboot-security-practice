@@ -1,7 +1,12 @@
 package com.security.practice.config;
 
+import com.security.practice.config.auth.PrincipalDetails;
+import com.security.practice.config.auth.PrincipalDetailsService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -12,12 +17,21 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Configuration
 @EnableWebSecurity //스프링 시큐리티 필터가 스프링 필터체인에 등록이 된다.
 @EnableGlobalMethodSecurity(securedEnabled = true,prePostEnabled = true) // secured 어노테이션 활성화 , preAuthorize & postAuthorize 어노테이션 활성화
+@RequiredArgsConstructor
 public class SecurityConfig  extends WebSecurityConfigurerAdapter {
 
     //해당 메서드의 리턴되는 오브젝트를 IoC로 등록해준다.
     @Bean
     public BCryptPasswordEncoder encodePWD(){
         return new BCryptPasswordEncoder();
+    }
+
+    private final PrincipalDetailsService principalDetailsService;
+
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(principalDetailsService).passwordEncoder(encodePWD());
     }
 
     @Override
