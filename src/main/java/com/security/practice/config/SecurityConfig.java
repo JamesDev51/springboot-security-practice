@@ -2,6 +2,7 @@ package com.security.practice.config;
 
 import com.security.practice.config.auth.PrincipalDetails;
 import com.security.practice.config.auth.PrincipalDetailsService;
+import com.security.practice.config.auth.oauth.PrincipalOauth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.context.annotation.Bean;
@@ -27,7 +28,7 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
     }
 
     private final PrincipalDetailsService principalDetailsService;
-
+    private final PrincipalOauth2UserService principalOauth2UserService;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -50,7 +51,10 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
                 .failureUrl("/fail")
                 .and()
                 .oauth2Login()
-                .loginPage("/loginForm"); //구글 로그인이 완료된 뒤의 후처리가 필요함.
+                .loginPage("/loginForm")
+                .userInfoEndpoint()
+                .userService(principalOauth2UserService);
+        //구글 로그인이 완료된 뒤의 후처리가 필요함. Tip . 코드 X (엑세스 토큰 + 사용자 프로필 정보 O)
 
     }
 }
