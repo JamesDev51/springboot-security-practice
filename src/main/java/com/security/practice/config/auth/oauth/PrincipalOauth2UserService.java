@@ -3,6 +3,7 @@ package com.security.practice.config.auth.oauth;
 import com.security.practice.config.auth.PrincipalDetails;
 import com.security.practice.config.auth.oauth.provider.FacebookUserInfo;
 import com.security.practice.config.auth.oauth.provider.GoogleUserInfo;
+import com.security.practice.config.auth.oauth.provider.NaverUserInfo;
 import com.security.practice.config.auth.oauth.provider.OAuth2UserInfo;
 import com.security.practice.model.User;
 import com.security.practice.repository.UserRepository;
@@ -14,6 +15,8 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 @Service
 //@RequiredArgsConstructor
@@ -44,8 +47,13 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
             oAuth2UserInfo = new FacebookUserInfo(oAuth2User.getAttributes());
             System.out.println("페이스북 로그인 요청");
 
+        }else if(userRequest.getClientRegistration().getRegistrationId().equals("naver")){
+            //naver는 response 안에 response 객체가 들어있는 형태라서 한 번더 map에서 response를 찾아서 리턴해줌
+            oAuth2UserInfo = new NaverUserInfo((Map) oAuth2User.getAttributes().get("response"));
+            System.out.println("네이버 로그인 요청");
+
         }else{
-            System.out.println("우리는 구글과 페이스북만 지원합니다.");
+            System.out.println("우리는 구글과 페이스북과 네이버버 지원합니다.");
         }
 
         String provider = oAuth2UserInfo.getProvider();
