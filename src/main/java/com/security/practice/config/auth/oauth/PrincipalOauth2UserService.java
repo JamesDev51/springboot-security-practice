@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
-@Service
+//@Service
 //@RequiredArgsConstructor
 public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
     public PrincipalOauth2UserService(@Lazy  BCryptPasswordEncoder bCryptPasswordEncoder, UserRepository userRepository) {
