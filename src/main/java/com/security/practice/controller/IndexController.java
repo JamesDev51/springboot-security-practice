@@ -1,7 +1,9 @@
 package com.security.practice.controller;
 
 import com.security.practice.config.auth.PrincipalDetails;
+
 import com.security.practice.model.User;
+
 import com.security.practice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Required;
@@ -17,7 +19,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-//@Controller
+@Controller
 @RequiredArgsConstructor
 public class IndexController {
 
